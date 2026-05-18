@@ -87,7 +87,7 @@ const Header = () => {
                       to={`/userinfo/${user._id}`}
                       className="user__info d-flex align-items-center gap-2"
                     >
-                      <i class="ri-user-line text-black"></i>
+                      <i className="ri-user-line text-black"></i>
                       <h5 className="mb-0 ">{user.username}</h5>
                     </Link>
 
@@ -107,7 +107,7 @@ const Header = () => {
                 )}
               </div>
               <span className="mobile__menu" onClick={toggleMenu}>
-                <i class="ri-menu-line"></i>
+                <i className="ri-menu-line"></i>
               </span>
             </div>
           </div>
