@@ -1,11 +1,10 @@
 
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { BASE_URL } from "../utils/config";
-import { AuthContext } from "../context/AuthContext";
 import { useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
-import { Container, Row, Button } from 'reactstrap';
+import { Container } from 'reactstrap';
 import BookingDates from "../components/Booking/BookingDate";
 import '../styles/bookingspage.css';
 import CommonSection from "../shared/CommonSection";

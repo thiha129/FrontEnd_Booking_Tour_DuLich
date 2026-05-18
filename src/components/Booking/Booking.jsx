@@ -1,121 +1,156 @@
 import React, { useState, useContext } from "react";
-import './booking.css';
-import { Container, Row, Col, Form, ListGroup, ListGroupItem, Button, FormGroup } from "reactstrap";
+import "./booking.css";
+import { Form, ListGroup, ListGroupItem, Button, FormGroup } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { BASE_URL } from "../../utils/config";
 
 const Booking = ({ tour, avgRating }) => {
+  const { price, reviews, title, _id, maxGroupSize } = tour;
+  const navigate = useNavigate();
 
-    const { price, reviews, title, _id,maxGroupSize } = tour
-    const navigate = useNavigate()
+  const { user } = useContext(AuthContext);
+  const [booking, setBooking] = useState({
+    userId: user && user._id,
+    userEmail: user && user.email,
+    tourName: title,
+    fullName: "",
+    phone: "",
+    guestSize: 1,
+    checkIn: "",
+    checkOut: "",
+    tours: _id,
+    totalPrice: 0,
+  });
 
-    const { user } = useContext(AuthContext);
-    const [totalPrice, setTotalPrice] = useState();
-    const [booking, setBooking] = useState({
-        userId: user && user._id,
-        userEmail: user && user.email,
-        tourName: title,
-        fullName: "",
-        phone: '',
-        guestSize: 1,
-        checkIn: '',
-        checkOut: '',
-        tours: _id,
-        totalPrice: 0
-    })
+  const handleChange = (e) => {
+    setBooking((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+  };
 
-    const handleChange = e => {
-        setBooking(prev => ({ ...prev, [e.target.id]: e.target.value }))
-    };
+  const serviceFee = 10;
+  const totalAmount = Number(price) * Number(booking.guestSize) + serviceFee;
 
-    const serviceFee = 10;
-    const totalAmount = Number(price) * Number(booking.guestSize) + serviceFee;
+  const handleClick = async (e) => {
+    e.preventDefault();
+    booking.totalPrice = totalAmount;
+    try {
+      if (!user || user === undefined || user === null) {
+        return alert("Please sign in");
+      }
+      const res = await fetch(`${BASE_URL}/booking`, {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(booking),
+      });
 
-    const handleClick = async e => {
-        e.preventDefault();
-        booking.totalPrice = totalAmount;
-        try {
-            if (!user || user == undefined || user == null) {
-                return alert('Please sign in')
-            }
-            const res = await fetch(`${BASE_URL}/booking`, {
-                method: 'post',
-                headers: {
-                    'content-type': 'application/json'
-                },
-                credentials: 'include',
-                body: JSON.stringify(booking)
-            })
+      const result = await res.json();
 
-            const result = await res.json()
-
-            if (!res.ok) {
-                return alert(result.message);
-            }
-            navigate("/thank-you");
-
-        } catch (error) {
-            console.log(123);
-            alert(error.message);
-        }
-
+      if (!res.ok) {
+        return alert(result.message);
+      }
+      navigate("/thank-you");
+    } catch (error) {
+      console.log(123);
+      alert(error.message);
     }
+  };
 
-    return (
-        <div className="booking">
-            <div className="booking__top d-flex align-items-center justify-content-between">
-                <h3>${price} <span> /per person</span></h3>
-                <span className="tour__rating  d-flex align-items-center justify-content-center gap-1">
-                    <i class="ri-star-fill" ></i>{avgRating == 0 ? null : avgRating} ({reviews?.length})
-                </span>
-            </div>
-            {/* {booking form start} */}
-            <div className="booking__form">
-                <h5>Information</h5>
-                <Form className="booking__info-form" onSubmit={handleClick}>
-                    <FormGroup  >
-                        <input type="text" placeholder="Full Name" id="fullName" required onChange={handleChange} />
-                    </FormGroup>
-                    <FormGroup>
-                        <input type="number" placeholder="Phone" id="phone" required onChange={handleChange} />
-                    </FormGroup>
-                    <FormGroup className="d-flex align-items-center gap-3">
-                    <span>CheckIn</span>
-                        <input type="date" placeholder="" id="checkIn" required onChange={handleChange} />
-                    </FormGroup>
-                    <FormGroup className="d-flex align-items-center gap-3">
-                    <span>CheckOut </span>
-                        <input type="date" placeholder="" id="checkOut" required onChange={handleChange}  min={booking.checkIn}/>
-                    </FormGroup>
-                    <FormGroup>
-                    <input type="number" placeholder="Guest" min='1' max={maxGroupSize} id="guestSize" required onChange={handleChange} />
+  return (
+    <div className="booking">
+      <div className="booking__top d-flex align-items-center justify-content-between">
+        <h3>
+          ${price} <span> /per person</span>
+        </h3>
+        <span className="tour__rating  d-flex align-items-center justify-content-center gap-1">
+          <i class="ri-star-fill"></i>
+          {avgRating === 0 ? null : avgRating} ({reviews?.length})
+        </span>
+      </div>
+      {/* {booking form start} */}
+      <div className="booking__form">
+        <h5>Information</h5>
+        <Form className="booking__info-form" onSubmit={handleClick}>
+          <FormGroup>
+            <input
+              type="text"
+              placeholder="Full Name"
+              id="fullName"
+              required
+              onChange={handleChange}
+            />
+          </FormGroup>
+          <FormGroup>
+            <input
+              type="number"
+              placeholder="Phone"
+              id="phone"
+              required
+              onChange={handleChange}
+            />
+          </FormGroup>
+          <FormGroup className="d-flex align-items-center gap-3">
+            <span>CheckIn</span>
+            <input
+              type="date"
+              placeholder=""
+              id="checkIn"
+              required
+              onChange={handleChange}
+            />
+          </FormGroup>
+          <FormGroup className="d-flex align-items-center gap-3">
+            <span>CheckOut </span>
+            <input
+              type="date"
+              placeholder=""
+              id="checkOut"
+              required
+              onChange={handleChange}
+              min={booking.checkIn}
+            />
+          </FormGroup>
+          <FormGroup>
+            <input
+              type="number"
+              placeholder="Guest"
+              min="1"
+              max={maxGroupSize}
+              id="guestSize"
+              required
+              onChange={handleChange}
+            />
+          </FormGroup>
+        </Form>
+      </div>
+      {/* {booking form end} */}
 
-                    </FormGroup>
-                </Form>
-            </div>
-            {/* {booking form end} */}
-
-            {/* {booking bottom start} */}
-            <div className="booking__bottom">
-                <ListGroup>
-                    <ListGroupItem className="border-0 px-0">
-                        <h5 className="d-flex align-items-center gap-1">${price} <i class="ri-close-line"></i> 1 person</h5>
-                        <span> ${price}</span>
-                    </ListGroupItem>
-                    <ListGroupItem className="border-0 px-0">
-                        <h5>Service charge</h5>
-                        <span> ${serviceFee}</span>
-                    </ListGroupItem>
-                    <ListGroupItem className="border-0 px-0 total">
-                        <h5>Total</h5>
-                        <span> ${totalAmount}</span>
-                    </ListGroupItem>
-                </ListGroup>
-                <Button className="btn primary__btn w-100 mt-4" onClick={handleClick}>Book Now</Button>
-            </div>
-            {/* {booking bottom end} */}
-        </div>
-    );
-}
+      {/* {booking bottom start} */}
+      <div className="booking__bottom">
+        <ListGroup>
+          <ListGroupItem className="border-0 px-0">
+            <h5 className="d-flex align-items-center gap-1">
+              ${price} <i class="ri-close-line"></i> 1 person
+            </h5>
+            <span> ${price}</span>
+          </ListGroupItem>
+          <ListGroupItem className="border-0 px-0">
+            <h5>Service charge</h5>
+            <span> ${serviceFee}</span>
+          </ListGroupItem>
+          <ListGroupItem className="border-0 px-0 total">
+            <h5>Total</h5>
+            <span> ${totalAmount}</span>
+          </ListGroupItem>
+        </ListGroup>
+        <Button className="btn primary__btn w-100 mt-4" onClick={handleClick}>
+          Book Now
+        </Button>
+      </div>
+      {/* {booking bottom end} */}
+    </div>
+  );
+};
 export default Booking;

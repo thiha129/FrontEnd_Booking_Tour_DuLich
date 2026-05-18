@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import CommonSection from "../shared/CommonSection";
 
 import '../styles/tour.css';
@@ -50,7 +50,7 @@ const Tours = () => {
                         <div className="paginaton d-flex align-items-center justify-content-center mt-4 gap-3">
                             {[...Array(pageCount).keys()].map(number => (
                                 <span key={number} onClick={() => setPage(number)}
-                                    className={page == number ? "active__page" : ""}>
+                                    className={page === number ? "active__page" : ""}>
                                     {number + 1}
                                 </span>
                             ))}
