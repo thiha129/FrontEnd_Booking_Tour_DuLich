@@ -151,11 +151,13 @@ CORS_ORIGIN=http://localhost:3000,https://front-end-booking-tour-du-lich.vercel.
 
 `CORS_ORIGIN` chỉ gồm scheme + domain (không có `/home`). Sau khi sửa env → **Redeploy**.
 
-**Vercel** — Environment Variables:
+**Vercel** — Environment Variables (xóa nếu đang trỏ sai `booking-tour-du-lich.vercel.app`):
 
 ```env
 REACT_APP_API_URL=https://backend-booking-tour-dulich.onrender.com/api/v1
 ```
+
+File `.env.production` trong repo cũng dùng URL Render. Biến trên Vercel Dashboard **ghi đè** lúc build — nếu set sai URL Vercel, app vẫn lỗi CORS.
 
 Sau khi thêm/sửa → **Redeploy** frontend.
 
