@@ -1,0 +1,28 @@
+/* Global responsive utilities — avoid overflow on html/body (breaks position: sticky) */
+#root {
+  overflow-x: clip;
+}
+
+.container {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media only screen and (max-width: 576px) {
+  .container {
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+  }
+
+  section {
+    padding: 40px 0 !important;
+  }
+}
+
+/* Tour grid — shared column helper */
+@media only screen and (max-width: 576px) {
+  .tour-grid-col {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}

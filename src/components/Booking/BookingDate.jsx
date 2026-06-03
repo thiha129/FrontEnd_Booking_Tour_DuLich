@@ -1,21 +1,26 @@
 import { differenceInCalendarDays, format } from "date-fns";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 const BookingDates = ({ booking, className }) => {
+  const { t } = useLanguage();
+  const nights = differenceInCalendarDays(
+    new Date(booking.checkOut),
+    new Date(booking.checkIn),
+  );
+
   return (
-    <>
-      <div className={"flex gap-2 " + className}>
+    <div className={"booking-dates " + (className || "")}>
+      <div className="booking-dates__row">
         <i className="ri-group-line"></i>
-        {booking.guestSize} people
-        {/* {differenceInCalendarDays(new Date(booking.checkOut), new Date(booking.checkIn))} nights: */}
+        {booking.guestSize} {t("tours.people")}
       </div>
-      <div className={"flex gap-1 " + className}>
+      <div className="booking-dates__row">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="w-6 h-6"
         >
           <path
             strokeLinecap="round"
@@ -23,19 +28,14 @@ const BookingDates = ({ booking, className }) => {
             d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"
           />
         </svg>
-        {differenceInCalendarDays(
-          new Date(booking.checkOut),
-          new Date(booking.checkIn),
-        )}{" "}
-        nights:
-        <div className="flex gap-1 items-center ml-2">
+        {nights} {t("booking.nights")}:
+        <span className="booking-dates__date-item">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-6 h-6"
           >
             <path
               strokeLinecap="round"
@@ -44,16 +44,15 @@ const BookingDates = ({ booking, className }) => {
             />
           </svg>
           {format(new Date(booking.checkIn), "yyyy-MM-dd")}
-        </div>
-        &rarr;
-        <div className="flex gap-1 items-center">
+        </span>
+        <span className="booking-dates__arrow">&rarr;</span>
+        <span className="booking-dates__date-item">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-6 h-6"
           >
             <path
               strokeLinecap="round"
@@ -62,28 +61,25 @@ const BookingDates = ({ booking, className }) => {
             />
           </svg>
           {format(new Date(booking.checkOut), "yyyy-MM-dd")}
-        </div>
+        </span>
       </div>
-      <div className={"flex gap-2 " + className}>
-        <div className="flex gap-1 bookingsPage__a">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-8 h-8"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"
-            />
-          </svg>
-          <span className="text-2xl">Total price: ${booking.totalPrice}</span>
-        </div>
+      <div className="booking-dates__price">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"
+          />
+        </svg>
+        {t("booking.totalPrice")}: ${booking.totalPrice}
       </div>
-    </>
+    </div>
   );
 };
 export default BookingDates;

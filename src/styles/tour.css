@@ -1,19 +1,75 @@
-.paginaton span{
-    width: 2rem;
-    height: 2rem;
-    padding: 5px;
-    border-radius: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--secondary-color);
-    color: var(--heading-color);
-    font-size: 1.1rem;
-    cursor: pointer;
-    font-weight: 700;
+.tours-page-section {
+  padding-top: 0;
 }
 
-.active__page{
-    background: var(--secondary-color);
-    color: #fff !important;
+.pagination {
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.pagination span {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border-color);
+  color: var(--heading-color);
+  font-size: 0.95rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all var(--transition);
+  background: var(--card-bg);
+}
+
+.pagination span:hover {
+  border-color: var(--secondary-color);
+  color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.pagination__nav {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border-color);
+  color: var(--heading-color);
+  font-size: 1.1rem;
+  cursor: pointer;
+  background: var(--card-bg);
+  transition: all var(--transition);
+}
+
+.pagination__nav:hover:not(:disabled) {
+  border-color: var(--secondary-color);
+  color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.pagination__nav:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.active__page {
+  background: linear-gradient(
+    135deg,
+    var(--secondary-color),
+    var(--primary-color)
+  ) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 15px rgba(247, 163, 37, 0.4);
+}
+
+@media only screen and (max-width: 576px) {
+  .pagination span {
+    width: 2.15rem;
+    height: 2.15rem;
+    font-size: 0.85rem;
+  }
 }

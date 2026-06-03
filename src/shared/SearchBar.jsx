@@ -1,15 +1,18 @@
 import React, { useRef } from "react";
 import "./search-bar.css";
 import { Col, Form, FormGroup } from "reactstrap";
-
 import { BASE_URL } from "./../utils/config";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../context/ToastContext";
+import { useLanguage } from "../i18n/LanguageContext";
 
 const SearchBar = () => {
   const locationRef = useRef("");
   const distanceRef = useRef(0);
   const maxGroupSizeRef = useRef(0);
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const { t } = useLanguage();
 
   const searchHandle = async () => {
     const location = locationRef.current.value;
@@ -17,18 +20,20 @@ const SearchBar = () => {
     const maxGroupSize = maxGroupSizeRef.current.value;
 
     if (location === "" || distance === "" || maxGroupSize === "") {
-      return alert("All fields are required");
+      return toast.warning(t("toast.searchFillAll"));
     }
     const res = await fetch(
-      `${BASE_URL}/tours/search/getTourBySearch?city=${location}&distance=${distance}&maxGroupSize=${maxGroupSize}`,
+      `${BASE_URL}/tours/search/getTourBySearch?city=${encodeURIComponent(location)}&distance=${encodeURIComponent(distance)}&maxGroupSize=${encodeURIComponent(maxGroupSize)}`
     );
-    console.log(res, "res");
-    if (!res.ok) alert("Something went wrong ");
+    if (!res.ok) {
+      toast.error(t("toast.searchFailed"));
+      return;
+    }
 
     const result = await res.json();
     navigate(
-      `/tours/search?city=${location}&distance=${distance}&maxGroupSize=${maxGroupSize}`,
-      { state: result.data },
+      `/tours/search?city=${encodeURIComponent(location)}&distance=${encodeURIComponent(distance)}&maxGroupSize=${encodeURIComponent(maxGroupSize)}`,
+      { state: result.data }
     );
   };
 
@@ -36,44 +41,41 @@ const SearchBar = () => {
     <Col lg="12">
       <div className="search__bar">
         <Form className="d-flex align-items-center gap-4">
-          <FormGroup className="d-flex gap-3 form__group form__group-fast">
+          <FormGroup className="d-flex gap-3 form__group form__group-fast m-4">
             <span>
               <i className="ri-map-pin-line"></i>
             </span>
             <div>
-              <h6>Location</h6>
+              <h6>{t("search.location")}</h6>
               <input
                 type="text"
-                placeholder="Where are you going?"
-                className=""
+                placeholder={t("search.locationPlaceholder")}
                 ref={locationRef}
               />
             </div>
           </FormGroup>
-          <FormGroup className="d-flex gap-3 form__group form__group-fast">
+          <FormGroup className="d-flex gap-3 form__group form__group-fast m-4">
             <span>
               <i className="ri-map-pin-time-line"></i>
             </span>
             <div>
-              <h6>Distance</h6>
+              <h6>{t("search.distance")}</h6>
               <input
                 type="number"
-                placeholder="Distance k/m"
-                className=""
+                placeholder={t("search.distancePlaceholder")}
                 ref={distanceRef}
               />
             </div>
           </FormGroup>
-          <FormGroup className="d-flex gap-3 form__group form__group-last">
+          <FormGroup className="d-flex gap-3 form__group form__group-last m-4">
             <span>
               <i className="ri-group-line"></i>
             </span>
             <div>
-              <h6>Max people</h6>
+              <h6>{t("search.maxPeople")}</h6>
               <input
                 type="number"
-                placeholder="0"
-                className=""
+                placeholder={t("search.maxPeoplePlaceholder")}
                 ref={maxGroupSizeRef}
               />
             </div>

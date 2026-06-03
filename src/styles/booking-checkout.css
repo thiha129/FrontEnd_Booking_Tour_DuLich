@@ -1,0 +1,239 @@
+.checkout-section {
+  padding: 2rem 0 4rem;
+}
+
+.checkout-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.checkout-steps__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 90px;
+}
+
+.checkout-steps__item span {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  background: var(--bg-color);
+  color: var(--text-light);
+  border: 2px solid var(--border-color);
+}
+
+.checkout-steps__item p {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-light);
+  text-align: center;
+}
+
+.checkout-steps__item--done span,
+.checkout-steps__item--active span {
+  background: linear-gradient(
+    135deg,
+    var(--secondary-color),
+    var(--primary-color)
+  );
+  color: #fff;
+  border-color: transparent;
+}
+
+.checkout-steps__item--active p,
+.checkout-steps__item--done p {
+  color: var(--heading-color);
+}
+
+.checkout-steps__line {
+  width: 48px;
+  height: 2px;
+  background: var(--border-color);
+  margin: 0 0.25rem 1.2rem;
+}
+
+.checkout-steps__line--done {
+  background: linear-gradient(
+    90deg,
+    var(--secondary-color),
+    var(--primary-color)
+  );
+}
+
+.checkout-card,
+.checkout-summary {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-md);
+  height: 100%;
+}
+
+.checkout-card h4,
+.checkout-summary h4 {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.checkout-card__hint {
+  font-size: 0.88rem;
+  color: var(--text-light);
+  margin-bottom: 1.25rem;
+}
+
+.checkout-payments {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.checkout-payment {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-color);
+  cursor: pointer;
+  font-family: var(--font-name);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--heading-color);
+  transition: all var(--transition);
+  text-align: left;
+}
+
+.checkout-payment i:first-child {
+  font-size: 1.35rem;
+  color: var(--primary-color);
+}
+
+.checkout-payment--active {
+  border-color: var(--secondary-color);
+  background: rgba(247, 163, 37, 0.08);
+  box-shadow: 0 0 0 3px rgba(247, 163, 37, 0.12);
+}
+
+.checkout-payment__check {
+  margin-left: auto;
+  color: var(--primary-color);
+  font-size: 1.2rem;
+}
+
+.checkout-card-fields {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed var(--border-color);
+}
+
+.checkout-card-fields label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.checkout-terms label {
+  font-size: 0.88rem;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.checkout-summary__tour {
+  display: flex;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.checkout-summary__tour img {
+  width: 96px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.checkout-summary__tour h5 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.checkout-summary__tour p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.checkout-summary__list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.25rem;
+}
+
+.checkout-summary__list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.45rem 0;
+  font-size: 0.9rem;
+}
+
+.checkout-summary__list span {
+  color: var(--text-light);
+}
+
+.checkout-summary__pricing {
+  border-top: 1px solid var(--border-color);
+  padding-top: 1rem;
+}
+
+.checkout-summary__row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.35rem 0;
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.checkout-summary__total {
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--border-color);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--heading-color);
+}
+
+.checkout-summary__total span:last-child {
+  color: var(--primary-color);
+}
+
+@media only screen and (max-width: 576px) {
+  .checkout-steps__line {
+    width: 24px;
+  }
+
+  .checkout-steps__item {
+    min-width: 72px;
+  }
+}

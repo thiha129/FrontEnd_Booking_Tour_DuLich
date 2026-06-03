@@ -1,0 +1,54 @@
+.lang-switcher {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(15, 45, 58, 0.06);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  gap: 2px;
+}
+
+.lang-switcher button {
+  border: none;
+  background: transparent;
+  color: var(--text-color);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition);
+  line-height: 1.2;
+}
+
+.lang-switcher button.active {
+  background: #fff;
+  color: var(--primary-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.lang-switcher button:hover:not(.active) {
+  color: var(--heading-color);
+}
+
+.header .lang-switcher button.active {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: #fff;
+}
+
+.auth-page .lang-switcher {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+}
+
+.auth-page .lang-switcher button {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.auth-page .lang-switcher button.active {
+  background: #fff;
+  color: var(--primary-color);
+}

@@ -1,36 +1,47 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
-const useFetch = (url) => {
+const useFetch = (url, { auth = false } = {}) => {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-    const [data, setData] = useState([]);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
+  const fetchData = useCallback(async () => {
+    if (!url) return;
 
-    useEffect(() => {
+    setLoading(true);
+    setError(null);
 
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                const res = await fetch(url);
-                if (!res.ok) {
-                    setError('failed to fetch');
-                }
-                const result = await res.json();
-                setData(result.data);
-                setLoading(false);
+    try {
+      const res = await fetch(url, {
+        credentials: auth ? "include" : "same-origin",
+      });
+      const result = await res.json();
 
-            } catch (error) {
-                setError(error.message);
-                setLoading(false);
-            }
-        }
-        fetchData();
-    }, [url]);
-    return {
-        data,
-        error,
-        loading
+      if (!res.ok) {
+        setData(null);
+        setError(result.message || "Failed to fetch");
+        return;
+      }
+
+      setData(result.data ?? null);
+    } catch (err) {
+      setData(null);
+      setError(err.message || "Failed to fetch");
+    } finally {
+      setLoading(false);
     }
-}
+  }, [url, auth]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  return {
+    data,
+    error,
+    loading,
+    refetch: fetchData,
+  };
+};
 
 export default useFetch;

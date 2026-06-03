@@ -4,31 +4,24 @@ import { Col } from "reactstrap";
 import weatherImg from "../assets/images/weather.png";
 import guideImg from "../assets/images/guide.png";
 import customizationImg from "../assets/images/customization.png";
+import { useLanguage } from "../i18n/LanguageContext";
 
-const serviceData = [
-  {
-    imgUrl: weatherImg,
-    title: "Calculate Weather",
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-  },
-  {
-    imgUrl: guideImg,
-    title: "Best Tour Guide",
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-  },
-  {
-    imgUrl: customizationImg,
-    title: "Customization",
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-  },
-];
+const serviceImages = [weatherImg, guideImg, customizationImg];
 
 const ServiceList = () => {
+  const { ta } = useLanguage();
+  const services = ta("home.services");
+
   return (
     <>
-      {serviceData.map((item, index) => (
+      {services.map((item, index) => (
         <Col lg="3" md="6" sm="12" className="mb-4" key={index}>
-          <ServiceCard item={item} />
+          <ServiceCard
+            item={{
+              ...item,
+              imgUrl: serviceImages[index],
+            }}
+          />
         </Col>
       ))}
     </>

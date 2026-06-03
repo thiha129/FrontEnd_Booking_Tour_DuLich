@@ -1,83 +1,171 @@
 import React, { useState, useContext } from "react";
-import { Container, Row, Col, Form, FormGroup, Button } from "reactstrap";
+import { Form, Button } from "reactstrap";
 import { Link, useNavigate } from "react-router-dom";
-import '../styles/login.css';
-
-import registerImg from '../assets/images/register.png';
-import userIcon from '../assets/images/user.png';
-
+import AuthLayout from "../components/Auth/AuthLayout";
+import heroCover from "../assets/images/hero-img02.jpg";
 import { AuthContext } from "../context/AuthContext";
-
+import { useLanguage } from "../i18n/LanguageContext";
 import { BASE_URL } from "../utils/config";
 
 const Register = () => {
-    const [credentials, setCredentials] = useState({
-        userName: undefined,
-        email: undefined,
-        password: undefined
-    })
+  const { t } = useLanguage();
+  const [credentials, setCredentials] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
-    const { dispatch } = useContext(AuthContext);
+  const { dispatch } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-    const navigate = useNavigate()
+  const handleChange = (e) => {
+    setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    setError(null);
+  };
 
-    const handleChange = e => {
-        setCredentials(prev => ({ ...prev, [e.target.id]: e.target.value }))
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setError(null);
 
-    const handleClick = async e => {
-        e.preventDefault();
-        try {
-            const res = await fetch(`${BASE_URL}/auth/register`, {
-                method: 'post',
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify(credentials)
-            })
-            const result = await res.json()
+    try {
+      const res = await fetch(`${BASE_URL}/auth/register`, {
+        method: "post",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(credentials),
+      });
+      const result = await res.json();
 
-            if (!res.ok) alert(result.message);
+      if (!res.ok) {
+        setError(result.message || t("auth.registerFailed"));
+        return;
+      }
 
-            dispatch({ type: 'REGISTER_SUCCESS' });
-            navigate('/login')
-        } catch (error) {
-            alert(error.message)
-        }
+      setSuccess(true);
+      dispatch({ type: "REGISTER_SUCCESS" });
+      setTimeout(() => navigate("/login"), 1800);
+    } catch (err) {
+      setError(err.message || t("toast.errorGeneric"));
+    } finally {
+      setSubmitting(false);
     }
+  };
 
-    return <section>
-        <Container>
-            <Row>
-                <Col lg='8' className="m-auto">
-                    <div className="login__container d-flex justify-content-between">
-                        <div className="login__img">
-                            <img src={registerImg} alt="" />
-                        </div>
-                        <div className="login__form">
-                            <div className="user">
-                                <img src={userIcon} alt="" />
-                            </div>
-                            <h2>Register</h2>
-                            <Form onSubmit={handleClick}>
-                                <FormGroup>
-                                    <input type="text" placeholder="UserName" required id="username" onChange={handleChange}></input>
-                                </FormGroup>
-                                <FormGroup>
-                                    <input type="email" placeholder="Email" required id="email" onChange={handleChange}></input>
-                                </FormGroup>
-                                <FormGroup>
-                                    <input type="password" placeholder="Password" required id="password" onChange={handleChange}></input>
+  return (
+    <AuthLayout
+      coverImage={heroCover}
+      eyebrow={t("auth.registerEyebrow")}
+      title={t("auth.registerCoverTitle")}
+      description={t("auth.registerCoverDesc")}
+      alternateLink={
+        <>
+          {t("auth.hasAccount")}
+          <Link to="/login">{t("auth.signIn")}</Link>
+        </>
+      }
+    >
+      <div className="auth-form__header">
+        <h2>{t("auth.registerTitle")}</h2>
+        <p>{t("auth.registerSubtitle")}</p>
+      </div>
 
-                                </FormGroup>
-                                <Button className="btn secondary__btn auth__btn" type="submit">Create Account</Button>
-                            </Form>
-                            <p>Already have a  account? <Link to={'/login'}>Login</Link></p>
-                        </div>
-                    </div>
-                </Col>
-            </Row>
-        </Container>
-    </section>
-}
+      {error && (
+        <div className="auth-message auth-message--error" role="alert">
+          <i className="ri-error-warning-line"></i>
+          <span>{error}</span>
+        </div>
+      )}
+
+      {success ? (
+        <div className="auth-message auth-message--success" role="status">
+          <i className="ri-checkbox-circle-line"></i>
+          <span>{t("auth.registerSuccess")}</span>
+        </div>
+      ) : (
+        <Form onSubmit={handleSubmit}>
+          <div className="auth-field">
+            <label htmlFor="username">{t("auth.username")}</label>
+            <div className="auth-field__input">
+              <i className="ri-user-line"></i>
+              <input
+                type="text"
+                id="username"
+                placeholder={t("auth.usernamePlaceholder")}
+                value={credentials.username}
+                onChange={handleChange}
+                required
+                autoComplete="username"
+              />
+            </div>
+          </div>
+
+          <div className="auth-field">
+            <label htmlFor="email">{t("auth.email")}</label>
+            <div className="auth-field__input">
+              <i className="ri-mail-line"></i>
+              <input
+                type="email"
+                id="email"
+                placeholder="you@example.com"
+                value={credentials.email}
+                onChange={handleChange}
+                required
+                autoComplete="email"
+              />
+            </div>
+          </div>
+
+          <div className="auth-field">
+            <label htmlFor="password">{t("auth.password")}</label>
+            <div className="auth-field__input">
+              <i className="ri-lock-password-line"></i>
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                placeholder="••••••••"
+                value={credentials.password}
+                onChange={handleChange}
+                required
+                minLength={6}
+                autoComplete="new-password"
+              />
+              <button
+                type="button"
+                className="auth-field__toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={
+                  showPassword ? t("auth.hidePassword") : t("auth.showPassword")
+                }
+              >
+                <i
+                  className={showPassword ? "ri-eye-off-line" : "ri-eye-line"}
+                ></i>
+              </button>
+            </div>
+            <p className="auth-field__hint">{t("auth.passwordHint")}</p>
+          </div>
+
+          <Button className="btn auth-submit" type="submit" disabled={submitting}>
+            {submitting ? (
+              <>
+                <i className="ri-loader-4-line"></i>
+                {t("auth.creating")}
+              </>
+            ) : (
+              <>
+                {t("auth.createAccount")}
+                <i className="ri-arrow-right-line"></i>
+              </>
+            )}
+          </Button>
+        </Form>
+      )}
+    </AuthLayout>
+  );
+};
+
 export default Register;

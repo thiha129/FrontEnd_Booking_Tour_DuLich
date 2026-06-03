@@ -1,32 +1,105 @@
-.service__item{
-    padding: 1rem;
-    border-bottom: 1px solid #faa83586;
-    border-right: 1px solid #faa83586;
-    border-radius: 0.5rem;
+.service__item {
+  padding: 2rem 1.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  height: 100%;
+  transition: all var(--transition);
+  position: relative;
+  overflow: hidden;
 }
 
-.service__img{
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-self: center;
-    justify-content: center;
-    border-radius: 50px;
-    background: var(--secondary-color);
-    padding: 0.5rem;
-    margin-bottom: 1rem;
+.service__item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 0;
+  background: linear-gradient(
+    180deg,
+    var(--secondary-color),
+    var(--primary-color)
+  );
+  transition: height var(--transition);
+}
+
+.service__item:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  border-color: transparent;
+}
+
+.service__item:hover::before {
+  height: 100%;
+}
+
+.service__img {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(247, 163, 37, 0.35),
+    rgba(255, 107, 53, 0.28)
+  );
+  padding: 0.65rem;
+  margin-bottom: 1.25rem;
+  transition: transform var(--transition);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2);
+}
+
+.service__item:hover .service__img {
+  transform: scale(1.1) rotate(5deg);
+  background: linear-gradient(
+    135deg,
+    var(--secondary-color),
+    var(--primary-color)
+  );
 }
 
 .service__img img {
-    width: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* Icon trắng mỏng → đen đậm, dễ nhìn trên nền cam nhạt */
+  filter: brightness(0) contrast(1.8);
+  opacity: 0.9;
+  transition: filter var(--transition), opacity var(--transition);
 }
 
-.service__item h5{
-    font-size: 1.1rem;
-    font-weight: 500;
+.service__item:hover .service__img img {
+  filter: brightness(0) invert(1) contrast(1.2);
+  opacity: 1;
 }
 
-.service__item p{
-    font-size: 0.9rem;
-    color: var(--text-color);
+.service__item h5 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.service__item p {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  line-height: 1.7;
+}
+
+@media only screen and (max-width: 768px) {
+  .service__item {
+    padding: 1.5rem 1.25rem;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .service__item h5 {
+    font-size: 1rem;
+  }
+
+  .service__item p {
+    font-size: 0.85rem;
+  }
 }

@@ -1,122 +1,226 @@
+/* Hero Section */
+.hero-section {
+  padding-top: 40px;
+  padding-bottom: 80px;
+  background: linear-gradient(180deg, #fff 0%, var(--bg-color) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(247, 163, 37, 0.08) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+}
+
 .hero__subtitle img {
   width: 2.3rem;
   height: 2.3rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+.hero__content {
+  padding-top: 2rem;
+  position: relative;
+  z-index: 1;
 }
 
 .hero__content h1 {
-  font-style: 3.2rem;
-  font-weight: 600;
+  font-size: 3rem;
+  font-weight: 800;
   margin-top: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   color: var(--heading-color);
+  line-height: 1.2;
 }
 
 .hero__content h1 .highlight {
-  color: var(--secondary-color);
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .hero__content p {
-  font-style: 1.1rem;
+  font-size: 1.05rem;
   color: var(--text-color);
-  line-height: 2rem;
+  line-height: 1.8;
+  max-width: 520px;
 }
 
 .hero__img-box img,
 .hero__img-box video {
   width: 100%;
-  height: 350px;
-  border-radius: 20px;
-  border: 1px solid var(--secondary-color);
+  height: 320px;
+  border-radius: var(--radius-lg);
+  border: 3px solid transparent;
+  background: linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(135deg, var(--secondary-color), var(--primary-color))
+      border-box;
   object-fit: cover;
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition), box-shadow var(--transition);
 }
 
-.hero__content {
-  padding-top: 3.5rem;
+.hero__img-box:hover img,
+.hero__img-box:hover video {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
 }
 
 .hero__img-box {
-  padding-top: 2rem;
+  padding-top: 1.5rem;
+}
+
+.hero__img-box:nth-child(1) img {
+  animation: float 4s ease-in-out infinite;
+}
+
+.hero__img-box:nth-child(3) img {
+  animation: float 4s ease-in-out infinite 1s;
+}
+
+/* Services */
+.services-section {
+  background: #fff;
 }
 
 .services__subtitle {
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: 500;
-  color: #ee6e6e;
+  color: var(--primary-color);
   font-family: var(--subtitle-font-name);
 }
 
 .services__title {
-  font-size: 2.5rem;
-  font-weight: 500;
+  font-size: 2.3rem;
+  font-weight: 700;
+}
+
+/* Featured tours */
+.featured-section {
+  background: var(--bg-color);
 }
 
 .feartured__tour-title {
   font-size: 2.3rem;
-  font-weight: 500;
+  font-weight: 700;
+  margin-top: 0.75rem;
+}
+
+/* Experience */
+.experience-section {
+  background: #fff;
 }
 
 .experience__content h2 {
-  font-size: 2.5rem;
+  font-size: 2.3rem;
   margin-top: 1rem;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .experience__content p {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: var(--text-color);
   margin-top: 1rem;
+  line-height: 1.8;
 }
 
 .counter__wrapper {
   margin-top: 2.5rem;
 }
 
+.counter__box {
+  text-align: center;
+  transition: transform var(--transition);
+}
+
+.counter__box:hover {
+  transform: translateY(-5px);
+}
+
 .counter__box span {
-  width: 70px;
-  height: 70px;
+  width: 72px;
+  height: 72px;
   margin: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--primary-color);
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   color: #fff;
-  font-size: 1.6rem;
-  font-weight: 600;
-  border-radius: 10px 5px 10px 5px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
 }
 
 .counter__box h6 {
-  font-size: 1.1rem;
-  margin-top: 0.7rem;
+  font-size: 0.95rem;
+  margin-top: 0.75rem;
   color: var(--text-color);
+  font-weight: 500;
 }
 
 .experience__img img {
   width: 90%;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  transition: transform var(--transition);
+}
+
+.experience__img:hover img {
+  transform: scale(1.02);
+}
+
+/* Gallery */
+.gallery-section {
+  background: var(--bg-color);
 }
 
 .gallery__title {
   font-size: 2.3rem;
-  margin-bottom: 2.5rem;
-  margin-top: 1rem;
+  margin-bottom: 2rem;
+  margin-top: 0.75rem;
+  font-weight: 700;
 }
 
 .masonry__img {
-  transition: 0.3s;
+  transition: all 0.4s ease;
+  cursor: pointer;
+  border-radius: var(--radius-md) !important;
 }
 
 .masonry__img:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
+  z-index: 10;
+  position: relative;
+}
+
+/* Testimonials */
+.testimonial-section {
+  background: #fff;
 }
 
 .testimonial__title {
   font-size: 2.3rem;
-  margin-top: 1rem;
+  margin-top: 0.75rem;
+  font-weight: 700;
 }
 
 @media only screen and (max-width: 992px) {
   .hero__content h1 {
-    font-size: 2.7rem;
+    font-size: 2.4rem;
   }
 
   .hero__img-box {
@@ -132,17 +236,32 @@
   .gallery__title,
   .testimonial__title,
   .experience__content h2 {
-    font-size: 2rem;
+    font-size: 1.9rem;
   }
 
   .experience__img {
     margin-top: 2rem;
+    text-align: center;
+  }
+
+  .experience__img img {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .services-section .col-lg-3 {
+    text-align: center;
   }
 }
 
 @media only screen and (max-width: 576px) {
+  .hero-section {
+    padding-bottom: 50px;
+  }
+
   .hero__content h1 {
-    font-size: 1.8rem;
+    font-size: 1.75rem;
   }
 
   .services__title,
@@ -151,5 +270,17 @@
   .testimonial__title,
   .experience__content h2 {
     font-size: 1.5rem;
+  }
+
+  .counter__wrapper {
+    flex-wrap: wrap;
+    gap: 1.5rem !important;
+    justify-content: center;
+  }
+
+  .counter__box span {
+    width: 60px;
+    height: 60px;
+    font-size: 1.25rem;
   }
 }

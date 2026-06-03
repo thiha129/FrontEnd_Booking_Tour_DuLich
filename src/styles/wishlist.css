@@ -1,0 +1,27 @@
+.wishlist-section {
+  padding-bottom: 3rem;
+}
+
+.wishlist-empty {
+  padding: 4rem 1rem;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.wishlist-empty i {
+  font-size: 4rem;
+  color: var(--primary-color);
+  display: block;
+  margin-bottom: 1.5rem;
+}
+
+.wishlist-empty h3 {
+  color: var(--heading-color);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.wishlist-empty p {
+  color: var(--text-color);
+  margin-bottom: 1.5rem;
+}

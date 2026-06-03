@@ -1,9 +1,91 @@
-.thank__you span i{
-     font-size: 4rem;
-     color: green;
+.thank-you-section {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
 }
 
-.thank__you h1{
-    font-size: 3.6rem;
-    font-family: var(--subtitle-font-name);
+.thank__you {
+  padding: 3rem;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  max-width: 500px;
+  margin: 0 auto;
+  animation: scaleIn 0.6s ease;
+}
+
+.thank__you span {
+  display: inline-block;
+  position: relative;
+}
+
+.thank__you span i {
+  font-size: 5rem;
+  color: #22c55e;
+  animation: scaleIn 0.5s ease 0.2s both;
+}
+
+.thank__you span::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border: 3px solid #22c55e;
+  border-radius: 50%;
+  animation: pulse-ring 1.5s ease infinite;
+}
+
+.thank__you h1 {
+  font-size: 3rem;
+  font-family: var(--subtitle-font-name);
+  color: var(--heading-color);
+  margin-top: 1.5rem;
+}
+
+.thank__you h3 {
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.thank-you__details {
+  text-align: left;
+  background: var(--bg-color);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.thank-you__details p {
+  margin: 0.35rem 0;
+  color: var(--text-color);
+}
+
+.thank-you__ref code {
+  background: rgba(255, 107, 53, 0.12);
+  color: var(--primary-color);
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.thank__you .primary__btn,
+.thank-you__btn {
+  margin-top: 1rem;
+  min-width: 200px;
+}
+
+@media only screen and (max-width: 576px) {
+  .thank__you {
+    padding: 2rem 1.25rem;
+    margin: 0 0.5rem;
+  }
+
+  .thank__you h1 {
+    font-size: 2.2rem;
+  }
+
+  .thank-you__btn {
+    width: 100% !important;
+    min-width: unset;
+  }
 }
