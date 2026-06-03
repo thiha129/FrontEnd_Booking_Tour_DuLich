@@ -37,7 +37,7 @@ const SearchResultList = () => {
       setError(null);
       try {
         const res = await fetch(
-          `${BASE_URL}/tours/search/getTourBySearch?city=${encodeURIComponent(city)}&distance=${encodeURIComponent(distance)}&maxGroupSize=${encodeURIComponent(maxGroupSize)}`
+          `${BASE_URL}/tours/search/getTourBySearch?city=${encodeURIComponent(city)}&distance=${encodeURIComponent(distance)}&maxGroupSize=${encodeURIComponent(maxGroupSize)}`,
         );
         if (!res.ok) throw new Error(t("toast.searchFailed"));
         const result = await res.json();
@@ -51,7 +51,7 @@ const SearchResultList = () => {
     };
 
     fetchSearch();
-  }, [location.state, city, distance, maxGroupSize, language]);
+  }, [location.state, t, city, distance, maxGroupSize, language]);
 
   return (
     <>
