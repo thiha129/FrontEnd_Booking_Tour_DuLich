@@ -133,7 +133,33 @@ Nếu username hoặc email đã tồn tại, script **nâng role lên admin** v
 
 - Thanh toán trên checkout là **giao diện demo**, chưa tích hợp cổng thanh toán thật.
 - Ảnh upload lưu tại `BackEnd_Booking_Tour_DuLich/uploads/`.
-- Production: đặt `NODE_ENV=production`, HTTPS, và `CORS_ORIGIN` trỏ đúng domain frontend.
+## Deploy production (Vercel + Render)
+
+| | URL |
+|---|-----|
+| Frontend (Vercel) | `https://front-end-booking-tour-du-lich.vercel.app` |
+| Backend (Render) | `https://backend-booking-tour-dulich.onrender.com` |
+
+**Render** — Environment Variables:
+
+```env
+MONGO_URI=<mongodb-atlas-uri>
+JWT_SECRET_KEY=<secret>
+NODE_ENV=production
+CORS_ORIGIN=http://localhost:3000,https://front-end-booking-tour-du-lich.vercel.app
+```
+
+`CORS_ORIGIN` chỉ gồm scheme + domain (không có `/home`). Sau khi sửa env → **Redeploy**.
+
+**Vercel** — Environment Variables:
+
+```env
+REACT_APP_API_URL=https://backend-booking-tour-dulich.onrender.com/api/v1
+```
+
+Sau khi thêm/sửa → **Redeploy** frontend.
+
+Kiểm tra: mở `https://backend-booking-tour-dulich.onrender.com/api/v1/tours` trên trình duyệt (phải trả JSON). Trên Vercel, F12 → Network: request tới backend không còn `403` / `CORS blocked`.
 
 ## Scripts backend
 
