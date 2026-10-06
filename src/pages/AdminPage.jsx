@@ -12,6 +12,7 @@ import DeleteTourModal from "../components/admin/DeleteTourModal";
 import UserFormModal from "../components/admin/UserFormModal";
 import DeleteUserModal from "../components/admin/DeleteUserModal";
 import AdminCharts from "../components/admin/AdminCharts";
+import { exportBookingInvoice, getInvoiceLabels } from "../utils/invoiceExport";
 import "../styles/admin-page.css";
 
 const TABS = ["overview", "tours", "bookings", "users"];
@@ -292,6 +293,14 @@ const AdminPage = () => {
     return t(`booking.statuses.${key}`);
   };
 
+  const handleExportInvoice = (booking) => {
+    try {
+      exportBookingInvoice(booking, getInvoiceLabels(t));
+    } catch (err) {
+      toast.error(err?.message || t("booking.invoiceFailed"));
+    }
+  };
+
   const openCreateUser = () => {
     setEditingUser(null);
     setUserModalOpen(true);
@@ -569,10 +578,23 @@ const AdminPage = () => {
                             </option>
                           ))}
                         </select>
-                        <Link to={`/userinfo/booking/${booking._id}`} className="admin-open-btn">
-                          <i className="ri-external-link-line"></i>
-                          {t("admin.open")}
-                        </Link>
+                        <div className="admin-booking-actions">
+                          {(booking.status || "pending") === "success" && (
+                            <button
+                              type="button"
+                              className="admin-invoice-btn"
+                              onClick={() => handleExportInvoice(booking)}
+                              title={t("booking.exportInvoice")}
+                            >
+                              <i className="ri-file-list-3-line" aria-hidden="true"></i>
+                              {t("booking.exportInvoice")}
+                            </button>
+                          )}
+                          <Link to={`/userinfo/booking/${booking._id}`} className="admin-open-btn">
+                            <i className="ri-external-link-line"></i>
+                            {t("admin.open")}
+                          </Link>
+                        </div>
                       </div>
                     ))}
                   </div>

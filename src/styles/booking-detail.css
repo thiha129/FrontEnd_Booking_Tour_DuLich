@@ -130,6 +130,26 @@
   flex-wrap: wrap;
 }
 
+.booking-invoice-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #15803d !important;
+  color: #fff !important;
+  border: 1px solid #15803d !important;
+  font-weight: 600;
+}
+
+.booking-invoice-btn:hover {
+  background: #166534 !important;
+  border-color: #166534 !important;
+  color: #fff !important;
+}
+
+.booking-invoice-btn i {
+  font-size: 1.05rem;
+}
+
 @media only screen and (max-width: 992px) {
   .booking-detail-card {
     grid-template-columns: 1fr;

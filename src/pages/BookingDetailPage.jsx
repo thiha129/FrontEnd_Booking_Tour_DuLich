@@ -8,15 +8,26 @@ import useFetch from "../hooks/useFetch";
 import BookingDates from "../components/Booking/BookingDate";
 import { AuthContext } from "../context/AuthContext";
 import { useLanguage } from "../i18n/LanguageContext";
+import { useToast } from "../context/ToastContext";
+import { exportBookingInvoice, getInvoiceLabels } from "../utils/invoiceExport";
 import "../styles/booking-detail.css";
 
 const BookingDetailPage = () => {
   const { id } = useParams();
   const { user } = useContext(AuthContext);
   const { t } = useLanguage();
+  const { toast } = useToast();
   const { data, loading, error } = useFetch(`${BASE_URL}/booking/${id}`, { auth: true });
   const booking = Array.isArray(data) ? data[0] : data;
   const tour = booking?.tours?.[0];
+
+  const handleExportInvoice = () => {
+    try {
+      exportBookingInvoice(booking, getInvoiceLabels(t));
+    } catch (err) {
+      toast.error(err?.message || t("booking.invoiceFailed"));
+    }
+  };
 
   return (
     <div>
@@ -84,6 +95,16 @@ const BookingDetailPage = () => {
                   <Link to={`/userinfo/${user._id}`} className="btn primary__btn">
                     {t("thankYou.viewBookings")}
                   </Link>
+                )}
+                {booking.status === "success" && (
+                  <button
+                    type="button"
+                    className="btn booking-invoice-btn"
+                    onClick={handleExportInvoice}
+                  >
+                    <i className="ri-file-list-3-line" aria-hidden="true"></i>
+                    {t("booking.exportInvoice")}
+                  </button>
                 )}
               </div>
             </div>
