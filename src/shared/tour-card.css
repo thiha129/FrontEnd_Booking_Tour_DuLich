@@ -90,7 +90,7 @@
   padding: 1.25rem;
 }
 
-.card__top span i {
+.tour__card .card__top span i {
   color: var(--secondary-color);
 }
 
@@ -113,34 +113,41 @@
   font-size: 0.95rem;
 }
 
-.tour__title {
-  margin-top: 0.85rem;
-  font-size: 1.05rem;
+.tour__card .tour__title {
+  margin-top: 0.75rem;
+  margin-bottom: 0;
+  font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  line-height: 1.4;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.9em;
 }
 
-.tour__title a {
+.tour__card .tour__title a {
   text-decoration: none;
   color: var(--heading-color);
   transition: color var(--transition);
 }
 
-.tour__title a:hover {
+.tour__card .tour__title a:hover {
   color: var(--primary-color);
 }
 
-.card__bottom h5 {
+.tour__card .card__bottom h5 {
+  margin-bottom: 0;
   color: var(--primary-color);
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 800;
 }
 
-.card__bottom h5 span {
+.tour__card .card__bottom h5 span {
   font-weight: 500;
   color: var(--text-light);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
 }
 
 .booking__btn {
@@ -179,8 +186,9 @@
 }
 
 @media only screen and (max-width: 576px) {
-  .tour__title {
-    font-size: 0.95rem;
+  .tour__card .tour__title {
+    font-size: 0.92rem;
+    min-height: 2.7em;
   }
 
   .tour__img img {
