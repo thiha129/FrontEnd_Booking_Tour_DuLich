@@ -104,17 +104,28 @@ const Header = () => {
               >
                 <i className="ri-heart-line"></i>
                 {wishlistCount > 0 && (
-                  <span className="nav__wishlist-badge">{wishlistCount}</span>
+                  <span className="nav__wishlist-badge">
+                    {wishlistCount > 99 ? "99+" : wishlistCount}
+                  </span>
                 )}
               </Link>
               <div className="nav__btns d-flex align-items-center gap-3">
                 {user ? (
                   <>
                     <Link
-                      to={`/userinfo/${user._id}`}
+                      to="/profile"
                       className="user__info d-flex align-items-center gap-2"
+                      title={t("nav.profile")}
                     >
-                      <i className="ri-user-line text-black"></i>
+                      {user.photo ? (
+                        <img
+                          src={user.photo}
+                          alt={user.username}
+                          className="user__info-avatar"
+                        />
+                      ) : (
+                        <i className="ri-user-line text-black"></i>
+                      )}
                       <h5 className="mb-0">{user.username}</h5>
                     </Link>
                     <Button className="btn btn-dark" onClick={logout}>

@@ -126,6 +126,15 @@
   font-size: 1.1rem;
 }
 
+.user__info-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1.5px solid rgba(255, 107, 53, 0.35);
+}
+
 .user__info h5 {
   font-size: 0.9rem;
   font-weight: 600;
@@ -243,9 +252,19 @@
   color: var(--heading-color);
   font-size: 1.35rem;
   text-decoration: none;
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  line-height: 1;
+  flex-shrink: 0;
   transition: color var(--transition);
+}
+
+.nav__wishlist i {
+  line-height: 1;
+  display: block;
 }
 
 .nav__wishlist:hover {
@@ -254,18 +273,24 @@
 
 .nav__wishlist-badge {
   position: absolute;
-  top: -6px;
-  right: -8px;
+  top: 2px;
+  right: 0;
+  z-index: 1;
   min-width: 18px;
   height: 18px;
-  padding: 0 4px;
-  border-radius: 50%;
+  padding: 0 5px;
+  border-radius: 999px;
   background: var(--primary-color);
   color: #fff;
   font-size: 0.65rem;
   font-weight: 700;
-  display: flex;
+  font-family: var(--font-name, inherit);
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
+  letter-spacing: 0;
+  box-sizing: border-box;
+  pointer-events: none;
+  box-shadow: 0 0 0 2px #fff;
 }

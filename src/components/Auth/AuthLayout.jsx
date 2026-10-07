@@ -17,7 +17,6 @@ const AuthLayout = ({
 
   return (
     <div className="auth-page">
-      <LanguageSwitcher />
       <aside
         className="auth-page__cover"
         style={{ backgroundImage: `url(${coverImage})` }}
@@ -53,10 +52,13 @@ const AuthLayout = ({
 
       <main className="auth-page__main">
         <div className="auth-page__form-wrap">
-          <Link to="/home" className="auth-page__back">
-            <i className="ri-arrow-left-line"></i>
-            {t("auth.backHome")}
-          </Link>
+          <div className="auth-page__toolbar">
+            <Link to="/home" className="auth-page__back">
+              <i className="ri-arrow-left-line"></i>
+              {t("auth.backHome")}
+            </Link>
+            <LanguageSwitcher className="lang-switcher--auth" />
+          </div>
 
           {children}
 

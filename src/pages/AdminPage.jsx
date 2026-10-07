@@ -21,7 +21,7 @@ const BOOKING_STATUSES = ["pending", "success", "cancelled"];
 const AdminPage = () => {
   const { t, language } = useLanguage();
   const { toast } = useToast();
-  const { user: currentUser } = useContext(AuthContext);
+  const { user: currentUser, dispatch: authDispatch } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState("overview");
   const [tours, setTours] = useState([]);
   const [users, setUsers] = useState([]);
@@ -288,6 +288,28 @@ const AdminPage = () => {
     }
   };
 
+  const confirmBookingPayment = async (bookingId) => {
+    setUpdatingBookingId(bookingId);
+
+    try {
+      const res = await fetch(`${BASE_URL}/booking/${bookingId}/confirm-payment`, {
+        method: "PATCH",
+        credentials: "include",
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.message || t("admin.paymentConfirmFailed"));
+
+      setBookings((prev) =>
+        prev.map((booking) => (booking._id === bookingId ? result.data : booking)),
+      );
+      toast.success(t("admin.paymentConfirmed"));
+    } catch (err) {
+      toast.error(err.message || t("admin.paymentConfirmFailed"));
+    } finally {
+      setUpdatingBookingId(null);
+    }
+  };
+
   const getBookingStatusLabel = (status) => {
     const key = status || "pending";
     return t(`booking.statuses.${key}`);
@@ -343,6 +365,9 @@ const AdminPage = () => {
         setUsers((prev) =>
           prev.map((user) => (user._id === editingUser._id ? result.data : user)),
         );
+        if (currentUser?._id === editingUser._id) {
+          authDispatch({ type: "UPDATE_USER", payload: result.data });
+        }
         toast.success(t("admin.userUpdateSuccess"));
       } else {
         setUsers((prev) => [result.data, ...prev]);
@@ -556,6 +581,15 @@ const AdminPage = () => {
                         <div>
                           <h5>{booking.tourName}</h5>
                           <p>{booking.fullName}</p>
+                          {booking.paymentMethod && (
+                            <p className="admin-payment-meta">
+                              {t(`booking.paymentMethods.${booking.paymentMethod}`)}
+                              {booking.paymentStatus
+                                ? ` · ${t(`booking.paymentStatuses.${booking.paymentStatus}`)}`
+                                : ""}
+                              {booking.paymentRef ? ` · ${booking.paymentRef}` : ""}
+                            </p>
+                          )}
                         </div>
                         <span>{booking.guestSize} {t("booking.guest")}</span>
                         <span>${Number(booking.totalPrice).toLocaleString()}</span>
@@ -579,6 +613,19 @@ const AdminPage = () => {
                           ))}
                         </select>
                         <div className="admin-booking-actions">
+                          {booking.paymentStatus === "awaiting_payment" &&
+                            booking.status !== "cancelled" && (
+                              <button
+                                type="button"
+                                className="admin-invoice-btn"
+                                onClick={() => confirmBookingPayment(booking._id)}
+                                disabled={updatingBookingId === booking._id}
+                                title={t("admin.confirmPayment")}
+                              >
+                                <i className="ri-secure-payment-line" aria-hidden="true"></i>
+                                {t("admin.confirmPayment")}
+                              </button>
+                            )}
                           {(booking.status || "pending") === "success" && (
                             <button
                               type="button"
@@ -617,11 +664,26 @@ const AdminPage = () => {
                     {filteredUsers.map((user) => (
                       <div className="admin-row admin-row--users" key={user._id}>
                         <div className="admin-row__user">
-                          <span>
-                            {(user.username || user.email || "U").slice(0, 1).toUpperCase()}
-                          </span>
+                          {user.photo ? (
+                            <img
+                              src={user.photo}
+                              alt={user.username}
+                              className="admin-row__user-avatar"
+                            />
+                          ) : (
+                            <span>
+                              {(user.username || user.email || "U")
+                                .slice(0, 1)
+                                .toUpperCase()}
+                            </span>
+                          )}
                           <div>
-                            <h5>{user.username}</h5>
+                            <h5>
+                              {user.username}
+                              {user._id === currentUser?._id && (
+                                <em className="admin-row__you">{t("admin.you")}</em>
+                              )}
+                            </h5>
                             <p>{user.email}</p>
                           </div>
                         </div>
@@ -633,11 +695,12 @@ const AdminPage = () => {
                         </span>
                         <div className="admin-row__actions">
                           <button type="button" onClick={() => openEditUser(user)}>
+                            <i className="ri-edit-line"></i>
                             {t("admin.edit")}
                           </button>
                           <Link to={`/userinfo/${user._id}`} className="admin-open-btn">
-                            <i className="ri-external-link-line"></i>
-                            {t("admin.open")}
+                            <i className="ri-ticket-2-line"></i>
+                            {t("admin.openBookings")}
                           </Link>
                           <button
                             type="button"
@@ -645,6 +708,7 @@ const AdminPage = () => {
                             onClick={() => openDeleteUser(user)}
                             disabled={user._id === currentUser?._id}
                           >
+                            <i className="ri-delete-bin-line"></i>
                             {t("admin.delete")}
                           </button>
                         </div>

@@ -85,6 +85,36 @@ const BookingDetailPage = () => {
                     {t(`booking.statuses.${booking.status || "pending"}`)}
                   </strong>
                 </div>
+                {booking.paymentMethod && (
+                  <div>
+                    <span>{t("booking.paymentMethod")}</span>
+                    <strong>
+                      {t(`booking.paymentMethods.${booking.paymentMethod}`)}
+                    </strong>
+                  </div>
+                )}
+                {booking.paymentStatus && (
+                  <div>
+                    <span>{t("booking.paymentStatus")}</span>
+                    <strong>
+                      {t(`booking.paymentStatuses.${booking.paymentStatus}`)}
+                    </strong>
+                  </div>
+                )}
+                {booking.paymentRef && (
+                  <div>
+                    <span>{t("booking.paymentRef")}</span>
+                    <strong>{booking.paymentRef}</strong>
+                  </div>
+                )}
+                {booking.paidAt && (
+                  <div>
+                    <span>{t("booking.paidAt")}</span>
+                    <strong>
+                      {format(new Date(booking.paidAt), "dd/MM/yyyy HH:mm")}
+                    </strong>
+                  </div>
+                )}
               </div>
 
               <div className="booking-detail-actions">

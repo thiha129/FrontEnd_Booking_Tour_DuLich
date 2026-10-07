@@ -23,6 +23,19 @@ const PAYMENT_METHODS = [
   { id: "bank", icon: "ri-bank-line", labelKey: "payBank" },
 ];
 
+const formatCardNumber = (value) =>
+  value
+    .replace(/\D/g, "")
+    .slice(0, 19)
+    .replace(/(\d{4})(?=\d)/g, "$1 ")
+    .trim();
+
+const formatExpiry = (value) => {
+  const digits = value.replace(/\D/g, "").slice(0, 4);
+  if (digits.length <= 2) return digits;
+  return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+};
+
 const BookingCheckout = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -30,6 +43,9 @@ const BookingCheckout = () => {
   const { t } = useLanguage();
 
   const [paymentMethod, setPaymentMethod] = useState("card");
+  const [cardNumber, setCardNumber] = useState("");
+  const [cardExpiry, setCardExpiry] = useState("");
+  const [cardCvc, setCardCvc] = useState("");
   const [agreed, setAgreed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -50,12 +66,21 @@ const BookingCheckout = () => {
       return toast.warning(t("checkout.agreeRequired"));
     }
 
+    if (paymentMethod === "card") {
+      if (!cardNumber.trim() || !cardExpiry.trim() || !cardCvc.trim()) {
+        return toast.warning(t("checkout.fillCardFields"));
+      }
+    }
+
     setSubmitting(true);
     try {
       const payload = {
         ...booking,
         totalPrice: totalAmount,
         paymentMethod,
+        ...(paymentMethod === "card"
+          ? { cardNumber, cardExpiry, cardCvc }
+          : {}),
       };
 
       const res = await fetch(`${BASE_URL}/booking`, {
@@ -75,8 +100,13 @@ const BookingCheckout = () => {
         replace: true,
         state: {
           tourName: tour.title,
-          totalPrice: totalAmount,
+          totalPrice: result.data?.totalPrice ?? totalAmount,
           bookingId: result.data?._id,
+          paymentMethod: result.data?.paymentMethod,
+          paymentStatus: result.data?.paymentStatus,
+          paymentRef: result.data?.paymentRef,
+          paymentInstructions: result.paymentInstructions,
+          emailSent: Boolean(result.emailSent),
         },
       });
     } catch (err) {
@@ -126,6 +156,7 @@ const BookingCheckout = () => {
                           : ""
                       }`}
                       onClick={() => setPaymentMethod(method.id)}
+                      disabled={submitting}
                     >
                       <i className={method.icon}></i>
                       <span>{t(`checkout.${method.labelKey}`)}</span>
@@ -142,7 +173,13 @@ const BookingCheckout = () => {
                       <Label>{t("checkout.cardNumber")}</Label>
                       <Input
                         type="text"
+                        inputMode="numeric"
+                        autoComplete="cc-number"
                         placeholder="4242 4242 4242 4242"
+                        value={cardNumber}
+                        onChange={(e) =>
+                          setCardNumber(formatCardNumber(e.target.value))
+                        }
                         disabled={submitting}
                       />
                     </FormGroup>
@@ -152,7 +189,13 @@ const BookingCheckout = () => {
                           <Label>{t("checkout.cardExpiry")}</Label>
                           <Input
                             type="text"
+                            inputMode="numeric"
+                            autoComplete="cc-exp"
                             placeholder="MM/YY"
+                            value={cardExpiry}
+                            onChange={(e) =>
+                              setCardExpiry(formatExpiry(e.target.value))
+                            }
                             disabled={submitting}
                           />
                         </FormGroup>
@@ -161,13 +204,39 @@ const BookingCheckout = () => {
                         <FormGroup>
                           <Label>{t("checkout.cardCvc")}</Label>
                           <Input
-                            type="text"
+                            type="password"
+                            inputMode="numeric"
+                            autoComplete="cc-csc"
                             placeholder="123"
+                            maxLength={4}
+                            value={cardCvc}
+                            onChange={(e) =>
+                              setCardCvc(
+                                e.target.value.replace(/\D/g, "").slice(0, 4),
+                              )
+                            }
                             disabled={submitting}
                           />
                         </FormGroup>
                       </Col>
                     </Row>
+                    <p className="checkout-card__hint checkout-card__hint--small">
+                      {t("checkout.testCardHint")}
+                    </p>
+                  </div>
+                )}
+
+                {paymentMethod === "momo" && (
+                  <div className="checkout-offline-hint">
+                    <i className="ri-information-line"></i>
+                    <p>{t("checkout.momoHint")}</p>
+                  </div>
+                )}
+
+                {paymentMethod === "bank" && (
+                  <div className="checkout-offline-hint">
+                    <i className="ri-information-line"></i>
+                    <p>{t("checkout.bankHint")}</p>
                   </div>
                 )}
 
@@ -262,8 +331,8 @@ const BookingCheckout = () => {
                 <div className="checkout-summary__pricing">
                   <div className="checkout-summary__row">
                     <span>
-                      ${tour.price} × {nights} {t("booking.nights")} × {guestCount}{" "}
-                      {t("booking.guest")}
+                      ${tour.price} × {nights} {t("booking.nights")} ×{" "}
+                      {guestCount} {t("booking.guest")}
                     </span>
                     <span>${subtotal}</span>
                   </div>

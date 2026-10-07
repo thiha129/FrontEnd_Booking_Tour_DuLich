@@ -97,6 +97,11 @@
   color: #15803d;
 }
 
+.contact__alert--error {
+  background: rgba(239, 68, 68, 0.12);
+  color: #b91c1c;
+}
+
 .contact__alert i {
   font-size: 1.25rem;
 }

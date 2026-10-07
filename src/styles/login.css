@@ -1,6 +1,7 @@
 /* Full-screen auth — split cover + clean white form */
 
 .auth-page {
+  position: relative;
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
   min-height: 100vh;
@@ -106,6 +107,14 @@
   animation: fadeInUp 0.5s ease;
 }
 
+.auth-page__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
 .auth-page__back {
   display: inline-flex;
   align-items: center;
@@ -114,12 +123,36 @@
   font-weight: 600;
   color: var(--text-light);
   text-decoration: none;
-  margin-bottom: 2rem;
+  margin-bottom: 0;
   transition: color var(--transition);
 }
 
 .auth-page__back:hover {
   color: var(--primary-color);
+}
+
+.auth-field__forgot {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.55rem;
+}
+
+.auth-field__forgot a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-decoration: none;
+  padding: 0.2rem 0;
+  border-bottom: 1px solid transparent;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.auth-field__forgot a:hover {
+  color: var(--secondary-color);
+  border-bottom-color: var(--secondary-color);
 }
 
 .auth-form__header {

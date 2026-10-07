@@ -5,6 +5,8 @@ import Tours from "../pages/Tours";
 import TourDetails from "../pages/TourDetails";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import ForgotPassword from "../pages/ForgotPassword";
+import ResetPassword from "../pages/ResetPassword";
 import SearchResultList from "../pages/SearchResultList";
 import ThankYou from "../pages/ThankYou";
 import BookingCheckout from "../pages/BookingCheckout";
@@ -14,6 +16,7 @@ import About from "../pages/About";
 import Contact from "../pages/Contact";
 import FAQ from "../pages/FAQ";
 import Wishlist from "../pages/Wishlist";
+import ProfilePage from "../pages/ProfilePage";
 import NotFound from "../pages/NotFound";
 import ProtectedRoute from "../components/ProtectedRoute";
 import AdminRoute from "../components/AdminRoute";
@@ -29,6 +32,8 @@ const Routers = () => {
       <Route path="/tours/:id" element={<TourDetails />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route
         path="/booking/checkout"
         element={
@@ -42,6 +47,14 @@ const Routers = () => {
       <Route path="/wishlist" element={<Wishlist />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/faq" element={<FAQ />} />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/admin"
         element={

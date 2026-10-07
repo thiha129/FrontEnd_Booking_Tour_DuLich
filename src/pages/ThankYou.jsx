@@ -9,7 +9,18 @@ const ThankYou = () => {
   const { user } = useContext(AuthContext);
   const { t } = useLanguage();
   const { state } = useLocation();
-  const { tourName, totalPrice, bookingId } = state || {};
+  const {
+    tourName,
+    totalPrice,
+    bookingId,
+    paymentMethod,
+    paymentStatus,
+    paymentRef,
+    paymentInstructions,
+    emailSent,
+  } = state || {};
+
+  const awaiting = paymentStatus === "awaiting_payment";
 
   return (
     <section className="thank-you-section">
@@ -18,10 +29,20 @@ const ThankYou = () => {
           <Col lg="12" className="pt-5 text-center">
             <div className="thank__you">
               <span>
-                <i className="ri-checkbox-circle-line"></i>
+                <i
+                  className={
+                    awaiting
+                      ? "ri-time-line"
+                      : "ri-checkbox-circle-line"
+                  }
+                ></i>
               </span>
               <h1 className="mb-3 fw-semibold">{t("thankYou.title")}</h1>
-              <h3 className="mb-3">{t("thankYou.subtitle")}</h3>
+              <h3 className="mb-3">
+                {awaiting
+                  ? t("thankYou.subtitleAwaiting")
+                  : t("thankYou.subtitle")}
+              </h3>
 
               {(tourName || bookingId) && (
                 <div className="thank-you__details">
@@ -35,12 +56,87 @@ const ThankYou = () => {
                       <strong>{t("booking.total")}:</strong> ${totalPrice}
                     </p>
                   )}
+                  {paymentMethod && (
+                    <p>
+                      <strong>{t("booking.paymentMethod")}:</strong>{" "}
+                      {t(`booking.paymentMethods.${paymentMethod}`)}
+                    </p>
+                  )}
+                  {paymentStatus && (
+                    <p>
+                      <strong>{t("booking.paymentStatus")}:</strong>{" "}
+                      {t(`booking.paymentStatuses.${paymentStatus}`)}
+                    </p>
+                  )}
+                  {paymentRef && (
+                    <p>
+                      <strong>{t("booking.paymentRef")}:</strong>{" "}
+                      <code>{paymentRef}</code>
+                    </p>
+                  )}
                   {bookingId && (
                     <p className="thank-you__ref">
                       {t("thankYou.bookingRef")}:{" "}
                       <code>{String(bookingId).slice(-8).toUpperCase()}</code>
                     </p>
                   )}
+                </div>
+              )}
+
+              {state && (
+                <p className="thank-you__email">
+                  <i
+                    className={
+                      emailSent
+                        ? "ri-mail-check-line"
+                        : "ri-mail-close-line"
+                    }
+                  ></i>{" "}
+                  {emailSent
+                    ? t("thankYou.emailSent")
+                    : t("thankYou.emailSkipped")}
+                </p>
+              )}
+
+              {paymentInstructions && (
+                <div className="thank-you__transfer">
+                  <h4>{t("thankYou.transferTitle")}</h4>
+                  {paymentInstructions.type === "bank" && (
+                    <>
+                      <p>
+                        <strong>{t("thankYou.bankName")}:</strong>{" "}
+                        {paymentInstructions.bankName}
+                      </p>
+                      <p>
+                        <strong>{t("thankYou.accountName")}:</strong>{" "}
+                        {paymentInstructions.accountName}
+                      </p>
+                      <p>
+                        <strong>{t("thankYou.accountNumber")}:</strong>{" "}
+                        <code>{paymentInstructions.accountNumber}</code>
+                      </p>
+                    </>
+                  )}
+                  {paymentInstructions.type === "momo" && (
+                    <>
+                      <p>
+                        <strong>{t("thankYou.momoPhone")}:</strong>{" "}
+                        <code>{paymentInstructions.phone}</code>
+                      </p>
+                      <p>
+                        <strong>{t("thankYou.accountName")}:</strong>{" "}
+                        {paymentInstructions.accountName}
+                      </p>
+                    </>
+                  )}
+                  <p>
+                    <strong>{t("thankYou.transferAmount")}:</strong> $
+                    {paymentInstructions.amount}
+                  </p>
+                  <p>
+                    <strong>{t("thankYou.transferContent")}:</strong>{" "}
+                    <code>{paymentInstructions.transferContent}</code>
+                  </p>
                 </div>
               )}
 

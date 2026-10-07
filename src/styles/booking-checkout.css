@@ -94,6 +94,35 @@
   margin-bottom: 1.25rem;
 }
 
+.checkout-card__hint--small {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+}
+
+.checkout-offline-hint {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  margin-top: 1.25rem;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  background: rgba(13, 110, 253, 0.06);
+  border: 1px solid rgba(13, 110, 253, 0.15);
+}
+
+.checkout-offline-hint i {
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  margin-top: 0.1rem;
+}
+
+.checkout-offline-hint p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--text-color);
+  line-height: 1.45;
+}
+
 .checkout-payments {
   display: flex;
   flex-direction: column;

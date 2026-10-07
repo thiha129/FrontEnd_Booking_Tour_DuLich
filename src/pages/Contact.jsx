@@ -3,6 +3,7 @@ import { Container, Row, Col, Form, FormGroup, Button } from "reactstrap";
 import CommonSection from "../shared/CommonSection";
 import Newsletter from "../shared/Newsletter";
 import { useLanguage } from "../i18n/LanguageContext";
+import { BASE_URL } from "../utils/config";
 import "../styles/contact.css";
 
 const Contact = () => {
@@ -14,6 +15,8 @@ const Contact = () => {
     message: "",
   });
   const [status, setStatus] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const contactItems = [
     {
@@ -45,12 +48,37 @@ const Contact = () => {
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.id]: e.target.value }));
     setStatus(null);
+    setErrorMsg("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus("success");
-    setForm({ name: "", email: "", subject: "", message: "" });
+    setSubmitting(true);
+    setStatus(null);
+    setErrorMsg("");
+
+    try {
+      const res = await fetch(`${BASE_URL}/mail/contact`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const result = await res.json();
+
+      if (!res.ok) {
+        setStatus("error");
+        setErrorMsg(result.message || t("contact.failed"));
+        return;
+      }
+
+      setStatus("success");
+      setForm({ name: "", email: "", subject: "", message: "" });
+    } catch {
+      setStatus("error");
+      setErrorMsg(t("contact.failed"));
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -85,6 +113,12 @@ const Contact = () => {
                     {t("contact.success")}
                   </div>
                 )}
+                {status === "error" && (
+                  <div className="contact__alert contact__alert--error">
+                    <i className="ri-error-warning-line"></i>
+                    {errorMsg}
+                  </div>
+                )}
                 <Form onSubmit={handleSubmit}>
                   <Row>
                     <Col md="6">
@@ -95,6 +129,7 @@ const Contact = () => {
                           placeholder={t("contact.namePlaceholder")}
                           value={form.name}
                           onChange={handleChange}
+                          disabled={submitting}
                           required
                         />
                       </FormGroup>
@@ -107,6 +142,7 @@ const Contact = () => {
                           placeholder="you@example.com"
                           value={form.email}
                           onChange={handleChange}
+                          disabled={submitting}
                           required
                         />
                       </FormGroup>
@@ -119,6 +155,7 @@ const Contact = () => {
                       placeholder={t("contact.subjectPlaceholder")}
                       value={form.subject}
                       onChange={handleChange}
+                      disabled={submitting}
                       required
                     />
                   </FormGroup>
@@ -129,11 +166,16 @@ const Contact = () => {
                       placeholder={t("contact.messagePlaceholder")}
                       value={form.message}
                       onChange={handleChange}
+                      disabled={submitting}
                       required
                     />
                   </FormGroup>
-                  <Button className="btn primary__btn" type="submit">
-                    {t("contact.send")}
+                  <Button
+                    className="btn primary__btn"
+                    type="submit"
+                    disabled={submitting}
+                  >
+                    {submitting ? t("checkout.processing") : t("contact.send")}
                   </Button>
                 </Form>
               </div>

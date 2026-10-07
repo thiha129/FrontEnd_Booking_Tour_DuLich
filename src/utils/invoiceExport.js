@@ -49,6 +49,8 @@ export const getInvoiceLabels = (t) => ({
   guests: t("booking.guest"),
   nights: t("booking.nights"),
   paymentSummary: t("booking.invoicePayment"),
+  paymentMethod: t("booking.paymentMethod"),
+  paymentRef: t("booking.paymentRef"),
   subtotal: t("booking.invoiceSubtotal"),
   serviceCharge: t("booking.serviceCharge"),
   total: t("booking.total"),
@@ -91,12 +93,18 @@ export const exportBookingInvoice = (booking, labels = {}) => {
     guests: labels.guests || "Guests",
     nights: labels.nights || "Nights",
     paymentSummary: labels.paymentSummary || "Payment summary",
+    paymentMethod: labels.paymentMethod || "Payment method",
+    paymentRef: labels.paymentRef || "Transaction ID",
     subtotal: labels.subtotal || "Subtotal",
     serviceCharge: labels.serviceCharge || "Service charge",
     total: labels.total || "Total",
     footer: labels.footer || "Thank you for booking with Travel Booking.",
     print: labels.print || "Print / Save PDF",
   };
+
+  const paymentMethodLabel = booking.paymentMethod
+    ? booking.paymentMethod.toUpperCase()
+    : "--";
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -246,6 +254,8 @@ export const exportBookingInvoice = (booking, labels = {}) => {
     <div class="section">
       <h3>${escapeHtml(L.paymentSummary)}</h3>
       <div class="totals">
+        <div class="row"><span>${escapeHtml(L.paymentMethod)}</span><strong>${escapeHtml(paymentMethodLabel)}</strong></div>
+        <div class="row"><span>${escapeHtml(L.paymentRef)}</span><strong>${escapeHtml(booking.paymentRef || "--")}</strong></div>
         <div class="row"><span>${escapeHtml(L.subtotal)}</span><strong>${escapeHtml(formatMoney(subtotal))}</strong></div>
         <div class="row"><span>${escapeHtml(L.serviceCharge)}</span><strong>${escapeHtml(formatMoney(serviceFee))}</strong></div>
         <div class="row"><span>${escapeHtml(L.total)}</span><strong>${escapeHtml(formatMoney(total))}</strong></div>

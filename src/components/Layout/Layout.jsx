@@ -5,7 +5,7 @@ import Footer from "../Footer/Footer";
 import Routers from "../../router/Routers";
 import ScrollToTop from "../ScrollToTop";
 
-const AUTH_PATHS = ["/login", "/register"];
+const AUTH_PATHS = ["/login", "/register", "/forgot-password", "/reset-password"];
 
 const Layout = () => {
     const { pathname } = useLocation();

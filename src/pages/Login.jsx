@@ -128,6 +128,12 @@ const Login = () => {
               ></i>
             </button>
           </div>
+          <div className="auth-field__forgot">
+            <Link to="/forgot-password">
+              <i className="ri-lock-unlock-line" aria-hidden="true"></i>
+              {t("auth.forgotPassword")}
+            </Link>
+          </div>
         </div>
 
         <Button

@@ -3,15 +3,15 @@ import "./newsletter.css";
 import { Container, Row, Col } from "reactstrap";
 import maleTourist from "../assets/images/male-tourist.png";
 import { useLanguage } from "../i18n/LanguageContext";
-
-const NEWSLETTER_KEY = "newsletter_subscribers";
+import { BASE_URL } from "../utils/config";
 
 const Newsletter = () => {
   const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const trimmed = email.trim();
     if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
@@ -19,21 +19,33 @@ const Newsletter = () => {
       return;
     }
 
+    setSubmitting(true);
     try {
-      const existing = JSON.parse(localStorage.getItem(NEWSLETTER_KEY) || "[]");
-      if (existing.includes(trimmed)) {
+      const res = await fetch(`${BASE_URL}/mail/newsletter`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email: trimmed }),
+      });
+      const result = await res.json();
+
+      if (!res.ok) {
+        setMessage({
+          type: "error",
+          text: result.message || t("newsletter.failed"),
+        });
+        return;
+      }
+
+      if (result.alreadySubscribed) {
         setMessage({ type: "info", text: t("newsletter.alreadySubscribed") });
       } else {
-        localStorage.setItem(
-          NEWSLETTER_KEY,
-          JSON.stringify([...existing, trimmed])
-        );
         setMessage({ type: "success", text: t("newsletter.success") });
         setEmail("");
       }
     } catch {
-      setMessage({ type: "success", text: t("newsletter.success") });
-      setEmail("");
+      setMessage({ type: "error", text: t("newsletter.failed") });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -53,9 +65,14 @@ const Newsletter = () => {
                     setEmail(e.target.value);
                     setMessage(null);
                   }}
+                  disabled={submitting}
                   required
                 />
-                <button className="newsletter__btn btn" type="submit">
+                <button
+                  className="newsletter__btn btn"
+                  type="submit"
+                  disabled={submitting}
+                >
                   {t("newsletter.subscribe")}
                 </button>
               </form>
