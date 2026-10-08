@@ -347,7 +347,7 @@ const TourDetails = () => {
                   <div className="tour__highlights">
                     <div className="tour__section-heading">
                       <span className="tour__section-icon tour__section-icon--warm">
-                        <i className="ri-sparkling-2-line"></i>
+                        <i className="ri-award-line"></i>
                       </span>
                       <div>
                         <h2>{t("tours.highlights")}</h2>
@@ -356,7 +356,9 @@ const TourDetails = () => {
                     </div>
                     <div className="tour__highlight-grid">
                       <div className="tour__highlight-card">
-                        <i className="ri-landscape-line"></i>
+                        <span className="tour__highlight-icon">
+                          <i className="ri-map-pin-line"></i>
+                        </span>
                         <h3>{t("tours.highlightDestination")}</h3>
                         <p>
                           {t("tours.highlightDestinationDesc", {
@@ -365,7 +367,9 @@ const TourDetails = () => {
                         </p>
                       </div>
                       <div className="tour__highlight-card">
-                        <i className="ri-team-line"></i>
+                        <span className="tour__highlight-icon">
+                          <i className="ri-group-line"></i>
+                        </span>
                         <h3>{t("tours.highlightGroup")}</h3>
                         <p>
                           {t("tours.highlightGroupDesc", {
@@ -374,7 +378,9 @@ const TourDetails = () => {
                         </p>
                       </div>
                       <div className="tour__highlight-card">
-                        <i className="ri-route-line"></i>
+                        <span className="tour__highlight-icon">
+                          <i className="ri-pin-distance-line"></i>
+                        </span>
                         <h3>{t("tours.highlightDistance")}</h3>
                         <p>
                           {t("tours.highlightDistanceDesc", {

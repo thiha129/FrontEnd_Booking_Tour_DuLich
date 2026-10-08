@@ -472,11 +472,21 @@
   border-color: rgba(255, 107, 53, 0.28);
 }
 
-.tour__highlight-card i {
-  font-size: 1.45rem;
+.tour__highlight-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.7rem;
+  background: rgba(255, 107, 53, 0.14);
   color: var(--primary-color);
-  display: block;
-  margin-bottom: 0.65rem;
+  font-size: 1.25rem;
+}
+
+.tour__highlight-icon i {
+  line-height: 1;
 }
 
 .tour__highlight-card h3 {
