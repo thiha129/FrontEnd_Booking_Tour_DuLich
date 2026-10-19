@@ -29,7 +29,7 @@ const vi = {
     socialLink: "Liên kết mạng xã hội",
   },
   toast: {
-    searchFillAll: "Vui lòng điền đầy đủ thông tin tìm kiếm",
+    searchFillAll: "Vui lòng nhập ít nhất một tiêu chí tìm kiếm",
     searchFailed: "Tìm kiếm thất bại. Vui lòng thử lại.",
     signInToBook: "Vui lòng đăng nhập để đặt tour này",
     signInToReview: "Vui lòng đăng nhập để viết đánh giá",
@@ -48,11 +48,11 @@ const vi = {
   },
   search: {
     location: "Địa điểm",
-    locationPlaceholder: "Bạn muốn đi đâu?",
+    locationPlaceholder: "Bạn muốn đi đâu? (tùy chọn)",
     distance: "Khoảng cách",
-    distancePlaceholder: "Km",
+    distancePlaceholder: "Km (tùy chọn)",
     maxPeople: "Số người tối đa",
-    maxPeoplePlaceholder: "0",
+    maxPeoplePlaceholder: "Tùy chọn",
   },
   home: {
     heroSubtitle: "Biết trước khi đi",

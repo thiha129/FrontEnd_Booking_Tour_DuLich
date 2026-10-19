@@ -15,15 +15,21 @@ const SearchBar = () => {
   const { t } = useLanguage();
 
   const searchHandle = async () => {
-    const location = locationRef.current.value;
-    const distance = distanceRef.current.value;
-    const maxGroupSize = maxGroupSizeRef.current.value;
+    const location = locationRef.current.value.trim();
+    const distance = distanceRef.current.value.trim();
+    const maxGroupSize = maxGroupSizeRef.current.value.trim();
 
-    if (location === "" || distance === "" || maxGroupSize === "") {
+    if (location === "" && distance === "" && maxGroupSize === "") {
       return toast.warning(t("toast.searchFillAll"));
     }
+
+    const params = new URLSearchParams();
+    if (location !== "") params.set("city", location);
+    if (distance !== "") params.set("distance", distance);
+    if (maxGroupSize !== "") params.set("maxGroupSize", maxGroupSize);
+
     const res = await fetch(
-      `${BASE_URL}/tours/search/getTourBySearch?city=${encodeURIComponent(location)}&distance=${encodeURIComponent(distance)}&maxGroupSize=${encodeURIComponent(maxGroupSize)}`
+      `${BASE_URL}/tours/search/getTourBySearch?${params.toString()}`
     );
     if (!res.ok) {
       toast.error(t("toast.searchFailed"));
@@ -31,10 +37,7 @@ const SearchBar = () => {
     }
 
     const result = await res.json();
-    navigate(
-      `/tours/search?city=${encodeURIComponent(location)}&distance=${encodeURIComponent(distance)}&maxGroupSize=${encodeURIComponent(maxGroupSize)}`,
-      { state: result.data }
-    );
+    navigate(`/tours/search?${params.toString()}`, { state: result.data });
   };
 
   return (

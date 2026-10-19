@@ -29,7 +29,7 @@ const en = {
     socialLink: "Social link",
   },
   toast: {
-    searchFillAll: "Please fill in all search fields",
+    searchFillAll: "Please enter at least one search field",
     searchFailed: "Search failed. Please try again.",
     signInToBook: "Please sign in to book this tour",
     signInToReview: "Please sign in to leave a review",
@@ -48,11 +48,11 @@ const en = {
   },
   search: {
     location: "Location",
-    locationPlaceholder: "Where are you going?",
+    locationPlaceholder: "Where are you going? (optional)",
     distance: "Distance",
-    distancePlaceholder: "Km",
+    distancePlaceholder: "Km (optional)",
     maxPeople: "Max people",
-    maxPeoplePlaceholder: "0",
+    maxPeoplePlaceholder: "Optional",
   },
   home: {
     heroSubtitle: "Know Before You Go",

@@ -3,6 +3,7 @@ import CommonSection from "../shared/CommonSection";
 import { Container, Row, Col } from "reactstrap";
 import { useLocation, useSearchParams } from "react-router-dom";
 import TourCard from "../shared/TourCard";
+import SearchBar from "../shared/SearchBar";
 import Newsletter from "../shared/Newsletter";
 import { BASE_URL } from "../utils/config";
 import { useLanguage } from "../i18n/LanguageContext";
@@ -26,7 +27,7 @@ const SearchResultList = () => {
       return;
     }
 
-    if (!city || !distance || !maxGroupSize) {
+    if (!city && !distance && !maxGroupSize) {
       setLoading(false);
       setData([]);
       return;
@@ -36,8 +37,12 @@ const SearchResultList = () => {
       setLoading(true);
       setError(null);
       try {
+        const params = new URLSearchParams();
+        if (city) params.set("city", city);
+        if (distance) params.set("distance", distance);
+        if (maxGroupSize) params.set("maxGroupSize", maxGroupSize);
         const res = await fetch(
-          `${BASE_URL}/tours/search/getTourBySearch?city=${encodeURIComponent(city)}&distance=${encodeURIComponent(distance)}&maxGroupSize=${encodeURIComponent(maxGroupSize)}`,
+          `${BASE_URL}/tours/search/getTourBySearch?${params.toString()}`,
         );
         if (!res.ok) throw new Error(t("toast.searchFailed"));
         const result = await res.json();
@@ -57,6 +62,13 @@ const SearchResultList = () => {
     <>
       <CommonSection title={t("tours.searchTitle")} />
       <section>
+        <Container>
+          <Row>
+            <SearchBar />
+          </Row>
+        </Container>
+      </section>
+      <section className="pt-0">
         <Container>
           {loading && (
             <h4 className="loading-state text-center pt-5">
